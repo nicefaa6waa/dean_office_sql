@@ -123,7 +123,7 @@ erDiagram
         int cedvel_id PK
         int fenn_id FK
         int muellim_id FK
-        datetime imtahan_tarixi
+        timestamp imtahan_tarixi
         string otaq_nomresi
         string imtahan_novu
     }
@@ -242,7 +242,7 @@ Aşağıdakı diaqram verilənlər bazasının daha geniş tətbiq arxitekturas�
 ```mermaid
 graph LR
     User[İstifadəçi / Dekanlıq] -- Sorğular --> App["Dekanlıq Tətbiqi <br/> (Python/Web)"]
-    App -- SQL --> DB[("Verilənlər Bazası <br/> SQLite")]
+    App -- SQL --> DB[("Verilənlər Bazası <br/> PostgreSQL")]
     DB -- Nəticələr --> App
     App -- Hesabatlar --> User
 ```
