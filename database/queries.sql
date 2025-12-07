@@ -1,69 +1,69 @@
 SELECT 
-    s.first_name AS Ad, 
-    s.last_name AS Soyad, 
-    subj.subject_name AS Fənn, 
-    g.score AS Bal,
+    s.ad, 
+    s.soyad, 
+    subj.fenn_adi AS Fənn, 
+    g.bal,
     CASE 
-        WHEN g.score >= 91 THEN 'A'
-        WHEN g.score >= 81 THEN 'B'
-        WHEN g.score >= 71 THEN 'C'
-        WHEN g.score >= 61 THEN 'D'
-        WHEN g.score >= 51 THEN 'E'
+        WHEN g.bal >= 91 THEN 'A'
+        WHEN g.bal >= 81 THEN 'B'
+        WHEN g.bal >= 71 THEN 'C'
+        WHEN g.bal >= 61 THEN 'D'
+        WHEN g.bal >= 51 THEN 'E'
         ELSE 'F' 
     END AS Hərf_Qiyməti
 FROM GRADES g
-JOIN STUDENTS s ON g.student_id = s.student_id
-JOIN SUBJECTS subj ON g.subject_id = subj.subject_id
-ORDER BY s.last_name, subj.subject_name;
+JOIN STUDENTS s ON g.telebe_id = s.telebe_id
+JOIN SUBJECTS subj ON g.fenn_id = subj.fenn_id
+ORDER BY s.soyad, subj.fenn_adi;
 
 SELECT 
-    subj.subject_name AS Fənn,
-    t.last_name AS Müəllim,
-    es.exam_date AS Tarix,
-    es.room_number AS Otaq,
-    es.exam_type AS Növ
+    subj.fenn_adi AS Fənn,
+    t.soyad AS Müəllim,
+    es.imtahan_tarixi AS Tarix,
+    es.otaq_nomresi AS Otaq,
+    es.imtahan_novu AS Növ
 FROM EXAM_SCHEDULE es
-JOIN SUBJECTS subj ON es.subject_id = subj.subject_id
-JOIN TEACHERS t ON es.teacher_id = t.teacher_id
-ORDER BY es.exam_date;
+JOIN SUBJECTS subj ON es.fenn_id = subj.fenn_id
+JOIN TEACHERS t ON es.muellim_id = t.muellim_id
+ORDER BY es.imtahan_tarixi;
 
 SELECT 
-    s.first_name AS Ad,
-    s.last_name AS Soyad,
-    subj.subject_name AS Fənn,
-    g.score AS Bal,
-    g.grade_date AS Tarix
+    s.ad,
+    s.soyad,
+    subj.fenn_adi AS Fənn,
+    g.bal,
+    g.qiymet_tarixi AS Tarix
 FROM GRADES g
-JOIN STUDENTS s ON g.student_id = s.student_id
-JOIN SUBJECTS subj ON g.subject_id = subj.subject_id
-WHERE g.score < 51
-ORDER BY g.score ASC;
+JOIN STUDENTS s ON g.telebe_id = s.telebe_id
+JOIN SUBJECTS subj ON g.fenn_id = subj.fenn_id
+WHERE g.bal < 51
+ORDER BY g.bal ASC;
 
 SELECT DISTINCT
-    t.first_name AS Ad,
-    t.last_name AS Soyad,
-    subj.subject_name AS Fənn
+    t.ad,
+    t.soyad,
+    subj.fenn_adi AS Fənn
 FROM EXAM_SCHEDULE es
-JOIN TEACHERS t ON es.teacher_id = t.teacher_id
-JOIN SUBJECTS subj ON es.subject_id = subj.subject_id;
+JOIN TEACHERS t ON es.muellim_id = t.muellim_id
+JOIN SUBJECTS subj ON es.fenn_id = subj.fenn_id;
 
 SELECT 
-    s.first_name AS Ad,
-    s.last_name AS Soyad,
-    COUNT(g.grade_id) as İmtahan_Sayı,
-    ROUND(AVG(g.score), 2) as Ortalama_Bal
+    s.ad,
+    s.soyad,
+    COUNT(g.qiymet_id) as İmtahan_Sayı,
+    ROUND(AVG(g.bal), 2) as Ortalama_Bal
 FROM STUDENTS s
-LEFT JOIN GRADES g ON s.student_id = g.student_id
-GROUP BY s.student_id, s.first_name, s.last_name
-HAVING COUNT(g.grade_id) > 0
+LEFT JOIN GRADES g ON s.telebe_id = g.telebe_id
+GROUP BY s.telebe_id, s.ad, s.soyad
+HAVING COUNT(g.qiymet_id) > 0
 ORDER BY Ortalama_Bal DESC;
 
 SELECT 
-    a.appeal_id,
-    s.last_name AS Tələbə,
-    subj.subject_name AS Fənn,
-    a.reason AS Səbəb,
+    a.muraciet_id,
+    s.soyad AS Tələbə,
+    subj.fenn_adi AS Fənn,
+    a.sebeb AS Səbəb,
     a.status AS Status
 FROM APPEALS a
-JOIN STUDENTS s ON a.student_id = s.student_id
-JOIN SUBJECTS subj ON a.subject_id = subj.subject_id;
+JOIN STUDENTS s ON a.telebe_id = s.telebe_id
+JOIN SUBJECTS subj ON a.fenn_id = subj.fenn_id;

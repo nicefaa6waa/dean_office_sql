@@ -1,4 +1,4 @@
-INSERT INTO STUDENTS (student_id, first_name, last_name, date_of_birth, group_id, email, enrollment_year) VALUES
+INSERT INTO STUDENTS (telebe_id, ad, soyad, dogum_tarixi, qrup_id, email, qebul_ili) VALUES
 (101, 'Ali', 'Aliyev', '2003-05-15', 'CS-2101', 'ali.aliyev@uni.edu', 2021),
 (102, 'Leyla', 'Mammadova', '2004-02-20', 'CS-2101', 'leyla.m@uni.edu', 2021),
 (103, 'Murad', 'Hasanov', '2003-11-10', 'CS-2102', 'murad.h@uni.edu', 2021),
@@ -12,14 +12,14 @@ INSERT INTO STUDENTS (student_id, first_name, last_name, date_of_birth, group_id
 (111, 'Rashad', 'Huseynov', '2003-06-14', 'CS-2102', 'rashad.h@uni.edu', 2021),
 (112, 'Zahra', 'Allahverdiyeva', '2004-10-01', 'IT-2103', 'zahra.a@uni.edu', 2021);
 
-INSERT INTO TEACHERS (teacher_id, first_name, last_name, department, email, title) VALUES
+INSERT INTO TEACHERS (muellim_id, ad, soyad, kafedra, email, elmi_derece) VALUES
 (1, 'Samir', 'Veliyev', 'Computer Science', 'samir.v@uni.edu', 'Professor'),
 (2, 'Nargiz', 'Khalilova', 'Mathematics', 'nargiz.k@uni.edu', 'Docent'),
 (3, 'Tural', 'Mustafayev', 'Information Technology', 'tural.m@uni.edu', 'Senior Lecturer'),
 (4, 'Elnara', 'Rzayeva', 'Humanities', 'elnara.r@uni.edu', 'Lecturer'),
 (5, 'Kamran', 'Taghiyev', 'Business Administration', 'kamran.t@uni.edu', 'Docent');
 
-INSERT INTO SUBJECTS (subject_id, subject_name, credits, semester, description) VALUES
+INSERT INTO SUBJECTS (fenn_id, fenn_adi, kreditler, semestr, tesvir) VALUES
 (10, 'Verilənlər Bazası Sistemləri', 6, 4, 'Introduction to RDBMS, SQL, and normalization.'),
 (20, 'Ali Riyaziyyat II', 6, 2, 'Advanced integration techniques and series.'),
 (30, 'Veb Proqramlaşdırma', 5, 5, 'HTML, CSS, JS and backend frameworks.'),
@@ -27,7 +27,7 @@ INSERT INTO SUBJECTS (subject_id, subject_name, credits, semester, description) 
 (50, 'Akademik Yazı', 3, 1, 'Principles of research and academic composition.'),
 (60, 'Biznes Etikası', 4, 3, 'Ethical principles in the corporate world.');
 
-INSERT INTO EXAM_SCHEDULE (schedule_id, subject_id, teacher_id, exam_date, room_number, exam_type) VALUES
+INSERT INTO EXAM_SCHEDULE (cedvel_id, fenn_id, muellim_id, imtahan_tarixi, otaq_nomresi, imtahan_novu) VALUES
 (1, 10, 1, '2024-06-10 10:00:00', 'Room 101', 'Final'),
 (2, 20, 2, '2024-06-12 14:00:00', 'Room 205', 'Final'),
 (3, 30, 3, '2024-06-15 09:00:00', 'Lab 3', 'Final'),
@@ -35,7 +35,7 @@ INSERT INTO EXAM_SCHEDULE (schedule_id, subject_id, teacher_id, exam_date, room_
 (5, 10, 1, '2024-06-25 10:00:00', 'Room 101', 'Retake'),
 (6, 60, 5, '2024-06-20 13:00:00', 'Room 304', 'Final');
 
-INSERT INTO GRADES (grade_id, student_id, subject_id, score, grade_date, comments) VALUES
+INSERT INTO GRADES (qiymet_id, telebe_id, fenn_id, bal, qiymet_tarixi, sherh) VALUES
 (1, 101, 10, 85, '2024-06-10', 'Good job'),
 (2, 102, 10, 92, '2024-06-10', 'Excellent'),
 (3, 103, 10, 45, '2024-06-10', 'Failed'),
@@ -78,7 +78,7 @@ INSERT INTO GRADES (grade_id, student_id, subject_id, score, grade_date, comment
 (40, 105, 20, 58, '2024-07-01', 'Summer school pass'),
 (41, 109, 30, 60, '2024-07-02', 'Summer school pass');
 
-INSERT INTO APPEALS (appeal_id, student_id, subject_id, appeal_date, reason, status) VALUES
+INSERT INTO APPEALS (muraciet_id, telebe_id, fenn_id, muraciet_tarixi, sebeb, status) VALUES
 (1, 109, 10, '2024-06-11', 'I believe question 3 was graded incorrectly.', 'Rejected'),
 (2, 105, 20, '2024-06-13', 'Calculation error in total score.', 'Approved'),
 (3, 106, 10, '2024-06-26', 'Technical issue during retake.', 'Pending');

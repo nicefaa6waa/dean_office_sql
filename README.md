@@ -49,12 +49,12 @@ Təhlilə əsasən, aşağıdakı əsas obyektlər müəyyən edilmişdir:
 6.  **APPEALS** (Apelyasiyalar): Qiymətin yenidən baxılması üçün tələbələrin rəsmi müraciətləri.
 
 ## 1.3 Hər Bir Obyektin Atributları
-*   **STUDENTS**: `student_id` (PK), `first_name`, `last_name`, `date_of_birth`, `group_id`, `email`, `enrollment_year`.
-*   **TEACHERS**: `teacher_id` (PK), `first_name`, `last_name`, `department`, `email`, `title`.
-*   **SUBJECTS**: `subject_id` (PK), `subject_name`, `credits`, `semester`, `description`.
-*   **EXAM_SCHEDULE**: `schedule_id` (PK), `subject_id` (FK), `teacher_id` (FK), `exam_date`, `room_number`, `exam_type`.
-*   **GRADES**: `grade_id` (PK), `student_id` (FK), `subject_id` (FK), `score`, `grade_date`, `comments`, `is_final`.
-*   **APPEALS**: `appeal_id` (PK), `student_id` (FK), `subject_id` (FK), `appeal_date`, `reason`, `status`.
+*   **STUDENTS**: `telebe_id` (PK), `ad`, `soyad`, `dogum_tarixi`, `qrup_id`, `email`, `qebul_ili`.
+*   **TEACHERS**: `muellim_id` (PK), `ad`, `soyad`, `kafedra`, `email`, `elmi_derece`.
+*   **SUBJECTS**: `fenn_id` (PK), `fenn_adi`, `kreditler`, `semestr`, `tesvir`.
+*   **EXAM_SCHEDULE**: `cedvel_id` (PK), `fenn_id` (FK), `muellim_id` (FK), `imtahan_tarixi`, `otaq_nomresi`, `imtahan_novu`.
+*   **GRADES**: `qiymet_id` (PK), `telebe_id` (FK), `fenn_id` (FK), `bal`, `qiymet_tarixi`, `sherh`.
+*   **APPEALS**: `muraciet_id` (PK), `telebe_id` (FK), `fenn_id` (FK), `muraciet_tarixi`, `sebeb`, `status`.
 
 ## 1.4 ER Diaqramı
 Aşağıdakı Obyekt-Əlaqə (ER) diaqramı bu obyektlər arasındakı əlaqələri təsvir edir. Bir-çox əlaqələrə diqqət yetirin (məsələn, Bir Müəllim bir çox Cədvəl girişi yaradır; Bir Tələbənin bir çox Qiyməti var).
@@ -62,51 +62,51 @@ Aşağıdakı Obyekt-Əlaqə (ER) diaqramı bu obyektlər arasındakı əlaqəl�
 ```mermaid
 erDiagram
     STUDENTS {
-        int student_id PK
-        string first_name
-        string last_name
-        date date_of_birth
-        string group_id
+        int telebe_id PK
+        string ad
+        string soyad
+        date dogum_tarixi
+        string qrup_id
         string email
-        int enrollment_year
+        int qebul_ili
     }
     TEACHERS {
-        int teacher_id PK
-        string first_name
-        string last_name
-        string department
+        int muellim_id PK
+        string ad
+        string soyad
+        string kafedra
         string email
-        string title
+        string elmi_derece
     }
     SUBJECTS {
-        int subject_id PK
-        string subject_name
-        int credits
-        int semester
-        string description
+        int fenn_id PK
+        string fenn_adi
+        int kreditler
+        int semestr
+        string tesvir
     }
     EXAM_SCHEDULE {
-        int schedule_id PK
-        int subject_id FK
-        int teacher_id FK
-        datetime exam_date
-        string room_number
-        string exam_type
+        int cedvel_id PK
+        int fenn_id FK
+        int muellim_id FK
+        datetime imtahan_tarixi
+        string otaq_nomresi
+        string imtahan_novu
     }
     GRADES {
-        int grade_id PK
-        int student_id FK
-        int subject_id FK
-        int score
-        date grade_date
-        string comments
+        int qiymet_id PK
+        int telebe_id FK
+        int fenn_id FK
+        int bal
+        date qiymet_tarixi
+        string sherh
     }
     APPEALS {
-        int appeal_id PK
-        int student_id FK
-        int subject_id FK
-        date appeal_date
-        string reason
+        int muraciet_id PK
+        int telebe_id FK
+        int fenn_id FK
+        date muraciet_tarixi
+        string sebeb
         string status
     }
 
@@ -163,24 +163,24 @@ Struktur `create_tables.sql` faylında müəyyən edilmişdir.
 
 ```sql
 CREATE TABLE STUDENTS (
-    student_id INT PRIMARY KEY,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    date_of_birth DATE,
-    group_id VARCHAR(10) NOT NULL,
+    telebe_id INT PRIMARY KEY,
+    ad VARCHAR(50) NOT NULL,
+    soyad VARCHAR(50) NOT NULL,
+    dogum_tarixi DATE,
+    qrup_id VARCHAR(10) NOT NULL,
     email VARCHAR(100) UNIQUE,
-    enrollment_year INT
+    qebul_ili INT
 );
 
 CREATE TABLE GRADES (
-    grade_id INT PRIMARY KEY,
-    student_id INT,
-    subject_id INT,
-    score INT CHECK (score >= 0 AND score <= 100),
-    grade_date DATE,
-    comments TEXT,
-    FOREIGN KEY (student_id) REFERENCES STUDENTS(student_id),
-    FOREIGN KEY (subject_id) REFERENCES SUBJECTS(subject_id)
+    qiymet_id INT PRIMARY KEY,
+    telebe_id INT,
+    fenn_id INT,
+    bal INT CHECK (bal >= 0 AND bal <= 100),
+    qiymet_tarixi DATE,
+    sherh TEXT,
+    FOREIGN KEY (telebe_id) REFERENCES STUDENTS(telebe_id),
+    FOREIGN KEY (fenn_id) REFERENCES SUBJECTS(fenn_id)
 );
 ```
 
@@ -188,27 +188,27 @@ CREATE TABLE GRADES (
 Bütün funksionallıqları yoxlamaq üçün verilənlər bazasını reprezentativ məlumat dəsti ilə doldurmuşuq.
 
 ```sql
-INSERT INTO STUDENTS (student_id, first_name, last_name, date_of_birth, group_id, email, enrollment_year) VALUES
+INSERT INTO STUDENTS (telebe_id, ad, soyad, dogum_tarixi, qrup_id, email, qebul_ili) VALUES
 (101, 'Ali', 'Aliyev', '2003-05-15', 'CS-2101', 'ali.aliyev@uni.edu', 2021),
 (102, 'Leyla', 'Mammadova', '2004-02-20', 'CS-2101', 'leyla.m@uni.edu', 2021);
 
-INSERT INTO GRADES (grade_id, student_id, subject_id, score, grade_date, comments) VALUES
+INSERT INTO GRADES (qiymet_id, telebe_id, fenn_id, bal, qiymet_tarixi, sherh) VALUES
 (1, 101, 10, 85, '2024-06-10', 'Good job'),
 (3, 103, 10, 45, '2024-06-10', 'Failed');
 ```
 
 ## 2.4 Açar və Əlaqələrin İzahı
-*   **PK (Əsas Açar)**: Unikal qeydi müəyyən edir (məsələn, `student_id`).
-*   **FK (Xarici Açar)**: Cədvəlləri əlaqələndirir. `GRADES.student_id` qiyməti `STUDENTS` cədvəlindəki konkret tələbə ilə əlaqələndirir. Bu, mövcud olmayan tələbəyə qiymət yazılmasının qarşısını alır.
-*   **Məhdudiyyətlər**: `CHECK (score >= 0 AND score <= 100)` verilənlər bazası səviyyəsində qiymətin etibarlılığını təmin edir.
+*   **PK (Əsas Açar)**: Unikal qeydi müəyyən edir (məsələn, `telebe_id`).
+*   **FK (Xarici Açar)**: Cədvəlləri əlaqələndirir. `GRADES.telebe_id` qiyməti `STUDENTS` cədvəlindəki konkret tələbə ilə əlaqələndirir. Bu, mövcud olmayan tələbəyə qiymət yazılmasının qarşısını alır.
+*   **Məhdudiyyətlər**: `CHECK (bal >= 0 AND bal <= 100)` verilənlər bazası səviyyəsində qiymətin etibarlılığını təmin edir.
 
 ## 2.5 Sistem Arxitekturası Diaqramı
 Aşağıdakı diaqram verilənlər bazasının daha geniş tətbiq arxitekturasına necə inteqrasiya olunduğunu göstərir.
 
 ```mermaid
 graph LR
-    User[İstifadəçi / Dekanlıq] -- Sorğular --> App[ Dekanlıq Tətbiqi <br/> (Python/Web) ]
-    App -- SQL --> DB[(Verilənlər Bazası <br/> SQLite)]
+    User[İstifadəçi / Dekanlıq] -- Sorğular --> App["Dekanlıq Tətbiqi <br/> (Python/Web)"]
+    App -- SQL --> DB[("Verilənlər Bazası <br/> SQLite")]
     DB -- Nəticələr --> App
     App -- Hesabatlar --> User
 ```
@@ -224,22 +224,22 @@ Bu sorğu oxunaqlı bir transkript təmin etmək üçün `STUDENTS`, `GRADES` v�
 
 ```sql
 SELECT 
-    s.first_name AS Ad, 
-    s.last_name AS Soyad, 
-    subj.subject_name AS Fənn, 
-    g.score AS Bal,
+    s.ad, 
+    s.soyad, 
+    subj.fenn_adi AS Fənn, 
+    g.bal,
     CASE 
-        WHEN g.score >= 91 THEN 'A'
-        WHEN g.score >= 81 THEN 'B'
-        WHEN g.score >= 71 THEN 'C'
-        WHEN g.score >= 61 THEN 'D'
-        WHEN g.score >= 51 THEN 'E'
+        WHEN g.bal >= 91 THEN 'A'
+        WHEN g.bal >= 81 THEN 'B'
+        WHEN g.bal >= 71 THEN 'C'
+        WHEN g.bal >= 61 THEN 'D'
+        WHEN g.bal >= 51 THEN 'E'
         ELSE 'F' 
     END AS Hərf_Qiyməti
 FROM GRADES g
-JOIN STUDENTS s ON g.student_id = s.student_id
-JOIN SUBJECTS subj ON g.subject_id = subj.subject_id
-ORDER BY s.last_name, subj.subject_name;
+JOIN STUDENTS s ON g.telebe_id = s.telebe_id
+JOIN SUBJECTS subj ON g.fenn_id = subj.fenn_id
+ORDER BY s.soyad, subj.fenn_adi;
 ```
 
 **Nəticə:**
@@ -250,15 +250,15 @@ ORDER BY s.last_name, subj.subject_name;
 
 ```sql
 SELECT 
-    subj.subject_name AS Fənn,
-    t.last_name AS Müəllim,
-    es.exam_date AS Tarix,
-    es.room_number AS Otaq,
-    es.exam_type AS Növ
+    subj.fenn_adi AS Fənn,
+    t.soyad AS Müəllim,
+    es.imtahan_tarixi AS Tarix,
+    es.otaq_nomresi AS Otaq,
+    es.imtahan_novu AS Növ
 FROM EXAM_SCHEDULE es
-JOIN SUBJECTS subj ON es.subject_id = subj.subject_id
-JOIN TEACHERS t ON es.teacher_id = t.teacher_id
-ORDER BY es.exam_date;
+JOIN SUBJECTS subj ON es.fenn_id = subj.fenn_id
+JOIN TEACHERS t ON es.muellim_id = t.muellim_id
+ORDER BY es.imtahan_tarixi;
 ```
 
 **Nəticə:**
@@ -269,16 +269,16 @@ Bu, "Kəsir Sessiyası" üçün çox vacibdir. 51-dən aşağı balları süzgə
 
 ```sql
 SELECT 
-    s.first_name AS Ad, 
-    s.last_name AS Soyad, 
-    subj.subject_name AS Fənn, 
-    g.score AS Bal,
-    g.grade_date AS Tarix
+    s.ad, 
+    s.soyad, 
+    subj.fenn_adi AS Fənn, 
+    g.bal,
+    g.qiymet_tarixi AS Tarix
 FROM GRADES g
-JOIN STUDENTS s ON g.student_id = s.student_id
-JOIN SUBJECTS subj ON g.subject_id = subj.subject_id
-WHERE g.score < 51
-ORDER BY g.score ASC;
+JOIN STUDENTS s ON g.telebe_id = s.telebe_id
+JOIN SUBJECTS subj ON g.fenn_id = subj.fenn_id
+WHERE g.bal < 51
+ORDER BY g.bal ASC;
 ```
 
 **Nəticə:**
@@ -289,12 +289,12 @@ Tədris yüklərini görmək üçün sadə aqreqasiya və ya unikal seçim.
 
 ```sql
 SELECT DISTINCT
-    t.first_name AS Ad,
-    t.last_name AS Soyad,
-    subj.subject_name AS Fənn
+    t.ad,
+    t.soyad,
+    subj.fenn_adi AS Fənn
 FROM EXAM_SCHEDULE es
-JOIN TEACHERS t ON es.teacher_id = t.teacher_id
-JOIN SUBJECTS subj ON es.subject_id = subj.subject_id;
+JOIN TEACHERS t ON es.muellim_id = t.muellim_id
+JOIN SUBJECTS subj ON es.fenn_id = subj.fenn_id;
 ```
 
 **Nəticə:**
@@ -305,14 +305,14 @@ Tələbənin bütün fənlər üzrə göstəricilərini müəyyən etmək üçü
 
 ```sql
 SELECT 
-    s.first_name AS Ad, 
-    s.last_name AS Soyad, 
-    COUNT(g.grade_id) as İmtahan_Sayı, 
-    ROUND(AVG(g.score), 2) as Ortalama_Bal
+    s.ad, 
+    s.soyad, 
+    COUNT(g.qiymet_id) as İmtahan_Sayı,
+    ROUND(AVG(g.bal), 2) as Ortalama_Bal
 FROM STUDENTS s
-LEFT JOIN GRADES g ON s.student_id = g.student_id
-GROUP BY s.student_id, s.first_name, s.last_name
-HAVING COUNT(g.grade_id) > 0
+LEFT JOIN GRADES g ON s.telebe_id = g.telebe_id
+GROUP BY s.telebe_id, s.ad, s.soyad
+HAVING COUNT(g.qiymet_id) > 0
 ORDER BY Ortalama_Bal DESC;
 ```
 
@@ -324,14 +324,14 @@ Qiymət mübahisələrinin iş axınını izləyir.
 
 ```sql
 SELECT 
-    a.appeal_id,
-    s.last_name AS Tələbə,
-    subj.subject_name AS Fənn,
-    a.reason AS Səbəb,
+    a.muraciet_id,
+    s.soyad AS Tələbə,
+    subj.fenn_adi AS Fənn,
+    a.sebeb AS Səbəb,
     a.status AS Status
 FROM APPEALS a
-JOIN STUDENTS s ON a.student_id = s.student_id
-JOIN SUBJECTS subj ON a.subject_id = subj.subject_id;
+JOIN STUDENTS s ON a.telebe_id = s.telebe_id
+JOIN SUBJECTS subj ON a.fenn_id = subj.fenn_id;
 ```
 
 **Nəticə:**
@@ -350,8 +350,4 @@ Bu layihə möhkəm bir təməl rolunu oynayır. Gələcək təkmilləşdirməl�
 
 ---
 
-# Ədəbiyyat Siyahısı
 
-1.  Elmasri, R., & Navathe, S. B. (2016). *Fundamentals of Database Systems* (7th ed.). Pearson.
-2.  Silberschatz, A., Korth, H. F., & Sudarshan, S. (2019). *Database System Concepts* (7th ed.). McGraw-Hill Education.
-3.  Date, C. J. (2003). *An Introduction to Database Systems* (8th ed.). Addison-Wesley.
