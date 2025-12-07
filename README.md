@@ -88,7 +88,7 @@ erDiagram
         int cedvel_id PK
         int fenn_id FK
         int muellim_id FK
-        datetime imtahan_tarixi
+        timestamp imtahan_tarixi
         string otaq_nomresi
         string imtahan_novu
     }
@@ -161,14 +161,15 @@ Fiziki implementasiya standart SQL istifadə edərək həyata keçirilmişdir. U
 Struktur `create_tables.sql` faylında müəyyən edilmişdir.
 
 ```sql
-CREATE TABLE STUDENTS (
-    telebe_id INT PRIMARY KEY,
-    ad VARCHAR(50) NOT NULL,
-    soyad VARCHAR(50) NOT NULL,
-    dogum_tarixi DATE,
-    qrup_id VARCHAR(10) NOT NULL,
-    email VARCHAR(100) UNIQUE,
-    qebul_ili INT
+CREATE TABLE EXAM_SCHEDULE (
+    cedvel_id INT PRIMARY KEY,
+    fenn_id INT,
+    muellim_id INT,
+    imtahan_tarixi TIMESTAMP NOT NULL,
+    otaq_nomresi VARCHAR(20),
+    imtahan_novu VARCHAR(20) CHECK (imtahan_novu IN ('Midterm', 'Final', 'Retake')),
+    FOREIGN KEY (fenn_id) REFERENCES SUBJECTS(fenn_id),
+    FOREIGN KEY (muellim_id) REFERENCES TEACHERS(muellim_id)
 );
 
 CREATE TABLE GRADES (
@@ -207,7 +208,7 @@ Aşağıdakı diaqram verilənlər bazasının daha geniş tətbiq arxitekturas�
 ```mermaid
 graph LR
     User[İstifadəçi / Dekanlıq] -- Sorğular --> App["Dekanlıq Tətbiqi <br/> (Python/Web)"]
-    App -- SQL --> DB[("Verilənlər Bazası <br/> SQLite")]
+    App -- SQL --> DB[("Verilənlər Bazası <br/> PostgreSQL")]
     DB -- Nəticələr --> App
     App -- Hesabatlar --> User
 ```

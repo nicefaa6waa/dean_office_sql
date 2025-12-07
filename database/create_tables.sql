@@ -29,7 +29,7 @@ CREATE TABLE EXAM_SCHEDULE (
     cedvel_id INT PRIMARY KEY,
     fenn_id INT,
     muellim_id INT,
-    imtahan_tarixi DATETIME NOT NULL,
+    imtahan_tarixi TIMESTAMP NOT NULL,
     otaq_nomresi VARCHAR(20),
     imtahan_novu VARCHAR(20) CHECK (imtahan_novu IN ('Midterm', 'Final', 'Retake')),
     FOREIGN KEY (fenn_id) REFERENCES SUBJECTS(fenn_id),
