@@ -1,10 +1,6 @@
 <div align="center">
-
 <!-- University Logo will go here -->
-![ADNSU Logo](images/adnsu.png)
-
-**AZƏRBAYCAN DÖVLƏT NEFT VƏ SƏNAYE UNİVERSİTETİ**
-
+<img src="images/adnsu.png" alt="ADNSU Logo" width="380"/>
 </div>
 
 ---
